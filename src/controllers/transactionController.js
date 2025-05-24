@@ -113,6 +113,7 @@ exports.getUserPortfolio = (req, res) => {
       a.name,
       a.logo_url,
       a.trading_view_symbol,
+      a.asset_type,
       SUM(
         CASE 
           WHEN t.transaction_type = 'compra' THEN t.quantity
