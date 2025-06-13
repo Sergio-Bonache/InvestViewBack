@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // Registro de usuario
 exports.registerUser = async (req, res) => {
@@ -50,13 +51,20 @@ exports.loginUser = (req, res) => {
       return res.status(401).json({ message: 'Credenciales inválidas' });
     }
 
-    // Retornamos datos del usuario sin contraseña
+    // Generar JWT
+    const token = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    // Retornamos datos del usuario y el token
     const { id, name, email: userEmail, role } = user;
-    res.json({ id, name, email: userEmail, role });
+    res.json({ id, name, email: userEmail, role, token });
   });
 };
 
-// Obtener todos los usuarios (solo admin)
+// Obtener todos los usuarios
 exports.getAllUsers = (req, res) => {
   db.query('SELECT id, name, email, role FROM users', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });

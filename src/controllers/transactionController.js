@@ -103,7 +103,7 @@ exports.getUserAssetQuantity = (req, res) => {
   });
 };
 
-// Obtener el portfolio de un usuario (activos con cantidad > 0)
+// Obtener el portfolio de un usuario 
 exports.getUserPortfolio = (req, res) => {
   const { user_id } = req.params;
 
